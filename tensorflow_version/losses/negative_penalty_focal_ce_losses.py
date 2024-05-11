@@ -36,7 +36,7 @@ class NegativePenaltySparseCategoricalFocalCrossentropy(tf.keras.losses.Loss):
 
     def call(self, y_true, y_pred):
         num_classes = y_pred.shape[-1]
-        y_true = tf.keras.utils.to_categorical(y_true, num_classes)
+        y_true = tf.squeeze(tf.one_hot(y_true, num_classes), axis=1)
         losses = _get_losses(
             y_true, y_pred, self.p_indices, self.penalty_label, self.alpha, self.alpha_l, 
             self.gamma, self.penalty_scale
