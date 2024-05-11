@@ -20,7 +20,7 @@ class NegativePenaltySparseCategoricalAccuracy(tf.keras.metrics.Metric):
 
     def update_state(self, y_true, y_pred, sample_weight=None):
         num_classes = y_pred.shape[-1]
-        y_true = tf.keras.utils.to_categorical(y_true, num_classes)
+        y_true = tf.squeeze(tf.one_hot(y_true, num_classes), axis=1)
         self.accuracy = _get_accuracy(y_true, y_pred, sample_weight, self.p_indices)
 
     def result(self):
