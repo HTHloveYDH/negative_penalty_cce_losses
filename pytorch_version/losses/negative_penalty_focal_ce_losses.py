@@ -20,11 +20,9 @@ class NegativePenaltyCategoricalFocalCrossentropy(nn.Module):
         }[reduction]
         self.cfce_loss_fn = {
             'logits': _cfce_loss_from_logits, 'softmax': _cfce_loss_from_softmax, 
-            'log_softmax': _cfce_loss_from_log_softmax
         }[from_where]
         self.penalty_loss_fn = {
             'logits': _penalty_loss_from_logits, 'softmax': _penalty_loss_from_softmax, 
-            'log_softmax': _penalty_loss_from_log_softmax
         }[from_where]
         self.eps = eps
 
@@ -54,11 +52,9 @@ class NegativePenaltySparseCategoricalFocalCrossentropy(nn.Module):
         }[reduction]
         self.cfce_loss_fn = {
             'logits': _cfce_loss_from_logits, 'softmax': _cfce_loss_from_softmax, 
-            'log_softmax': _cfce_loss_from_log_softmax
         }[from_where]
         self.penalty_loss_fn = {
             'logits': _penalty_loss_from_logits, 'softmax': _penalty_loss_from_softmax, 
-            'log_softmax': _penalty_loss_from_log_softmax
         }[from_where]
         self.eps = eps
 
@@ -125,15 +121,6 @@ def _cfce_loss_from_softmax(y_pred, y_true, alpha_l, gamma, eps):
     )
 
 
-def _cfce_loss_from_log_softmax(y_pred, y_true, alpha_l, gamma, eps):
-    modulating_factor = torch.pow(1.0 - y_pred, gamma)
-    weighting_factor = torch.multiply(modulating_factor, alpha_l)
-    return torch.sum(
-        torch.multiply(weighting_factor, -y_true * F.log_softmax(torch.clip(y_pred, eps, 1.0 - eps), dim=-1)), 
-        dim=-1
-    )
-
-
 def _penalty_loss_from_logits(y_pred, y_penalty, penalty_scale, alpha_l, gamma, eps):
     modulating_factor = torch.pow(y_pred, gamma)
     weighting_factor = torch.multiply(modulating_factor, alpha_l)
@@ -148,15 +135,6 @@ def _penalty_loss_from_softmax(y_pred, y_penalty, penalty_scale, alpha_l, gamma,
     weighting_factor = torch.multiply(modulating_factor, alpha_l)
     return torch.sum(
         torch.multiply(weighting_factor, -y_penalty * torch.log(torch.clip(1.0 - y_pred, eps, 1.0 - eps))), 
-        dim=-1
-    ) / penalty_scale
-
-
-def _penalty_loss_from_log_softmax(y_pred, y_penalty, penalty_scale, alpha_l, gamma, eps):
-    modulating_factor = torch.pow(y_pred, gamma)
-    weighting_factor = torch.multiply(modulating_factor, alpha_l)
-    return torch.sum(
-        torch.multiply(weighting_factor, -y_penalty * F.log_softmax(torch.clip(1.0 - y_pred, eps, 1.0 - eps), dim=-1)), 
         dim=-1
     ) / penalty_scale
 
