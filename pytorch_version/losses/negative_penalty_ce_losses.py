@@ -54,7 +54,8 @@ class NegativePenaltySparseCategoricalCrossentropy(nn.Module):
 
     def forward(self, y_pred, y_true):
         num_classes = y_pred.shape[-1]
-        y_true = torch.squeeze(F.one_hot(y_true, num_classes=num_classes), dim=1)
+        # y_true = torch.squeeze(F.one_hot(y_true, num_classes=num_classes), dim=1)
+        y_true = F.one_hot(y_true, num_classes=num_classes).float()
         losses = _get_losses(
             y_true, y_pred, self.p_indices, self.penalty_label, self.alpha, self.penalty_scale, self.eps,
             self.cce_loss_fn, self.penalty_loss_fn
