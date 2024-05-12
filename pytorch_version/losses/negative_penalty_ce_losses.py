@@ -17,11 +17,9 @@ class NegativePenaltyCategoricalCrossentropy(nn.Module):
         }[reduction]
         self.cce_loss_fn = {
             'logits': _cce_loss_from_logits, 'softmax': _cce_loss_from_softmax, 
-            'log_softmax': _cce_loss_from_log_softmax
         }[from_where]
         self.penalty_loss_fn = {
             'logits': _penalty_loss_from_logits, 'softmax': _penalty_loss_from_softmax, 
-            'log_softmax': _penalty_loss_from_log_softmax
         }[from_where]
         self.eps = eps
 
@@ -48,11 +46,9 @@ class NegativePenaltySparseCategoricalCrossentropy(nn.Module):
         }[reduction]
         self.cce_loss_fn = {
             'logits': _cce_loss_from_logits, 'softmax': _cce_loss_from_softmax, 
-            'log_softmax': _cce_loss_from_log_softmax
         }[from_where]
         self.penalty_loss_fn = {
             'logits': _penalty_loss_from_logits, 'softmax': _penalty_loss_from_softmax, 
-            'log_softmax': _penalty_loss_from_log_softmax
         }[from_where]
         self.eps = eps
 
@@ -109,10 +105,6 @@ def _cce_loss_from_softmax(y_pred, y_true, eps):
     return torch.sum(-y_true * torch.log(torch.clip(y_pred, eps, 1.0 - eps)), dim=-1)
 
 
-def _cce_loss_from_log_softmax(y_pred, y_true, eps):
-    return torch.sum(-y_true * F.log_softmax(torch.clip(y_pred, eps, 1.0 - eps), dim=-1), dim=-1)
-
-
 def _penalty_loss_from_logits(y_pred, y_penalty, penalty_scale, eps):
     return F.cross_entropy(1.0 - y_pred, y_penalty) / penalty_scale
 
@@ -120,12 +112,6 @@ def _penalty_loss_from_logits(y_pred, y_penalty, penalty_scale, eps):
 def _penalty_loss_from_softmax(y_pred, y_penalty, penalty_scale, eps):
     return torch.sum(
         -y_penalty * torch.log(torch.clip(1.0 - y_pred, eps, 1.0 - eps)), dim=-1
-    ) / penalty_scale
-
-
-def _penalty_loss_from_log_softmax(y_pred, y_penalty, penalty_scale, eps):
-    return torch.sum(
-        -y_penalty * F.log_softmax(torch.clip(1.0 - y_pred, eps, 1.0 - eps), dim=-1), dim=-1
     ) / penalty_scale
 
 
