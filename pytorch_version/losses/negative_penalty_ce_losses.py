@@ -99,7 +99,7 @@ def _sum_over_batch(losses):
 
 
 def _cce_loss_from_logits(y_pred, y_true, eps):
-    return F.cross_entropy(y_pred, y_true)
+    return F.cross_entropy(y_pred, y_true, reduction='none')
 
 
 def _cce_loss_from_softmax(y_pred, y_true, eps):
@@ -107,7 +107,7 @@ def _cce_loss_from_softmax(y_pred, y_true, eps):
 
 
 def _penalty_loss_from_logits(y_pred, y_penalty, penalty_scale, eps):
-    return F.cross_entropy(1.0 - y_pred, y_penalty) / penalty_scale
+    return F.cross_entropy(1.0 - y_pred, y_penalty, reduction='none') / penalty_scale
 
 
 def _penalty_loss_from_softmax(y_pred, y_penalty, penalty_scale, eps):
