@@ -81,7 +81,7 @@ def _get_losses(y_true, y_pred, p_indices:list, penalty_label:list, alpha:float,
     cce_losses = cfce_loss_fn(y_pred, y_true, alpha_l, gamma, eps)
     cce_losses = cce_loss_sample_weights * cce_losses
     # y_penalty
-    y_penalty = torch.repeat_interleave(torch.unsqueeze(torch.tensor(penalty_label), dim=0), batch_size, dim=0)
+    y_penalty = torch.repeat_interleave(torch.unsqueeze(torch.tensor(penalty_label), dim=0), batch_size, dim=0).float()
     # penalty_loss_sample_weights
     penalty_loss_sample_weights = 1.0 - cce_loss_sample_weights
     # penalty loss
