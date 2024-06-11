@@ -1,8 +1,8 @@
 # negative_penalty_cce_loss
 
-#### Supposed there are six samples: 'aa', 'bb', 'bb', 'dd', 'ee', ff. 
+#### Supposed there are six samples: 'aa', 'bb', 'cc', 'dd', 'ee', ff. 
 
-#### And each of 'aa', 'bb', 'cc', 'dd' belongs to a certain category, on the contrary, 'ee' and 'ff' do not belong to any certain obvious category including class 'Alpha' or 'Beta'. 
+#### And each of 'aa', 'bb', 'cc', 'dd' belongs to a certain category, on the contrary, 'ee' and 'ff' do not belong to any certain obvious category. 
 
 #### Let's say 'aa', 'bb' belong to class 'Alpha', 'cc', 'ee' belong to class 'Beta'.
 
