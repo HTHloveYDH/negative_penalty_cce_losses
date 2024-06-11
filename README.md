@@ -1,6 +1,6 @@
 # negative_penalty_cce_loss
 
-#### Supposed there are six samples: 'aa', 'bb', 'cc', 'dd', 'ee', 'ff'. 
+#### Suppose there are six samples: 'aa', 'bb', 'cc', 'dd', 'ee', 'ff'. 
 
 #### And each of 'aa', 'bb', 'cc', 'dd' belongs to a certain category, on the contrary, 'ee' and 'ff' do not belong to any certain obvious category. 
 
